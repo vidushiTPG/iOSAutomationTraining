@@ -17,6 +17,9 @@ public class PickerView extends BaseTest {
     public PickerView (AppiumDriver<MobileElement> driver){
         this.driver=driver;
         PageFactory.initElements(driver, this);
+        if (!pickerViewTitle.isDisplayed()){
+            throw new IllegalStateException("PickerView page Not found");
+        }
     }
 
     @FindBy(xpath = "//XCUIElementTypePickerWheel")

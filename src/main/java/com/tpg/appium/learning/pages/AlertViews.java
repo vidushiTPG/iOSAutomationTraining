@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +20,11 @@ public class AlertViews {
 
     public AlertViews(AppiumDriver<MobileElement> driver) {
         this.driver = driver;
+
         PageFactory.initElements(driver, this);
+        if(!alertPageTitle.isDisplayed()){
+            throw new IllegalStateException("AlertView page not opened");
+        }
     }
 
     @FindBy(xpath = "//XCUIElementTypeStaticText[@name='Simple']")
@@ -42,6 +47,14 @@ public class AlertViews {
 
     @FindBy(xpath = "//XCUIElementTypeButton")
     public static List<WebElement> buttonType;
+
+    @FindBy(name = "UIKitCatalog")
+    public WebElement backButton;
+
+    public Home backToHome() {
+        backButton.click();
+        return new Home(driver);
+    }
 
     public String buttons = "//XCUIElementTypeButton";
 
@@ -99,28 +112,12 @@ public class AlertViews {
         buttonPath.click();
 
 
-      /* List<String> dd= buttonList.stream().map(buttonXpath -> buttonXpath.getText()).collect(Collectors.toList());
-        if(dd.contains(buttonName)){
 
-        }
-
-        buttonList.stream().forEach(buttonXpath -> {
-            try {
-                sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (buttonXpath.getText().equalsIgnoreCase(buttonName))
-            {
-                buttonXpath.click();
-                break;
-            }
-
-        });
-*/
         return this;
 
     }
+
+
 
 
     /**
@@ -135,11 +132,9 @@ public class AlertViews {
 
     }
 
-    @FindBy(name = "UIKitCatalog")
-    public WebElement backButton;
 
-    public Home backToHome() {
-        backButton.click();
-        return new Home(driver);
-    }
+
+    public boolean isPageTitleDisplayed(WebElement locator) {
+        return locator.isDisplayed();}
+
 }

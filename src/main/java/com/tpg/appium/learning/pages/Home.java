@@ -2,14 +2,11 @@ package com.tpg.appium.learning.pages;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.collections.Objects;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,7 +17,10 @@ public class Home {
 
     public Home(AppiumDriver<MobileElement> driver) {
         this.driver = driver;
-        PageFactory.initElements(driver,this);
+        PageFactory.initElements(driver, this);
+        if (!uiKitCatalogTitle.isDisplayed()){
+            throw new IllegalStateException("Home Page Not Found");
+        }
     }
 
 
@@ -61,10 +61,10 @@ public class Home {
      * @return Return the object of Home page
      */
 
-    public WebElement ifItemPresent(String itemName){
-       Optional<WebElement> webElementOptional= catalogList.stream().filter(itemXpath -> itemXpath.getText().equalsIgnoreCase(itemName))
+    public WebElement ifItemPresent(String itemName) {
+        Optional<WebElement> webElementOptional = catalogList.stream().filter(itemXpath -> itemXpath.getText().equalsIgnoreCase(itemName))
                 .collect(Collectors.toSet()).stream().findFirst();
-         return webElementOptional.get();
+        return webElementOptional.get();
     }
 
     public AlertViews clickAlertViewsPageTab(String itemName) {
@@ -78,9 +78,6 @@ public class Home {
         webElement.click();
         return new PickerView(driver);
     }
-
-
-
 
 
     public AlertViews openAlertPage() {

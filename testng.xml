@@ -12,7 +12,7 @@
             <class name="com.tpg.appium.learning.test.home.ScrollToWebViewTest"/>
             <class name="com.tpg.appium.learning.test.pickerView.PickerViewTest"/>
         </classes>
-    </test
+    </test>
 
 
 </suite>

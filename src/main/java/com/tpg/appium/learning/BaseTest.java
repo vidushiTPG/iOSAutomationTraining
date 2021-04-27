@@ -1,13 +1,15 @@
 package com.tpg.appium.learning;
 
-import com.tpg.appium.learning.pages.*;
+import com.tpg.appium.learning.pages.AlertViews;
+import com.tpg.appium.learning.pages.Home;
+import com.tpg.appium.learning.pages.PickerView;
+import com.tpg.appium.learning.pages.WebView;
 import com.tpg.appium.learning.utility.AppiumServerUtility;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.PerformsTouchActions;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.ios.IOSDriver;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.IOSMobileCapabilityType;
 import io.appium.java_client.remote.MobileCapabilityType;
@@ -18,8 +20,10 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -38,12 +42,8 @@ public class BaseTest {
     protected Home home;
     protected AlertViews alertViews;
     protected PickerView pickerView;
-    protected Slider slider;
     protected WebView webView;
 
-    public BaseTest() {
-        PageFactory.initElements(driver, this);
-    }
 
     public AppiumDriver getDriver() {
         return driver;
@@ -90,12 +90,9 @@ public class BaseTest {
         AppiumServerUtility.start();
     }
 
- //   @Parameters({ "deviceName", "platformName", "platformVersion"})
     @BeforeMethod
-    public void beforeTest(/*String deviceName, String platformName,
-                           String platformVersion*/) throws Exception {
-    //    setDeviceName(deviceName);
-     //   setPlatformName(platformName);
+    public void beforeTest() throws Exception {
+
         URL url;
         AppiumDriver driver;
         InputStream inputStream = null;
@@ -126,7 +123,7 @@ public class BaseTest {
             desiredCapabilities.setCapability(MobileCapabilityType.APP, iOSAppUrl);
             driver = new IOSDriver(url, desiredCapabilities);
             setDriver(driver);
-            home =new Home(driver);
+            home = new Home(driver);
 
         } catch (Exception e) {
             System.out.println("driver initialization failure. ABORT!!!\n" + e.toString());
@@ -158,14 +155,13 @@ public class BaseTest {
 
     //some common locators
 
-    @FindBy (name = "UIKitCatalog")
+    @FindBy(name = "UIKitCatalog")
     public WebElement backButton;
 
-    public  Home backToHome(){
+    public Home backToHome() {
         backButton.click();
         return new Home(driver);
     }
-
 
 
     public void scrollDown() {
@@ -180,14 +176,14 @@ public class BaseTest {
                 .release().perform();
     }
 
-    public WebView scrollAndClick(By listItems, String textToClick){
+    public WebView scrollAndClick(By listItems, String textToClick) {
         boolean flag = false;
 
-        while(true){
-            for (WebElement elementToClick : driver.findElements(listItems)){
-                if (elementToClick.getAttribute("value").equals(textToClick)){
+        while (true) {
+            for (WebElement elementToClick : driver.findElements(listItems)) {
+                if (elementToClick.getAttribute("value").equals(textToClick)) {
                     elementToClick.click();
-                    flag=true;
+                    flag = true;
                     break;
                 }
             }
@@ -195,7 +191,7 @@ public class BaseTest {
                 break;
             else scrollDown();
         }
-        return  new WebView(driver);
+        return new WebView(driver);
 
     }
 
